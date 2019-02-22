@@ -57,19 +57,6 @@ namespace FLS.MembershipFunctions
 			}
 		}
 
-		[Obsolete("Use PremiseModifier instead. Modification passes through to PremiseModifier.")]
-		public Double Modification
-		{
-			get
-			{
-				return PremiseModifier;
-			}
-			set
-			{
-				PremiseModifier = value;
-			}
-		}
-
 		#endregion
 
 		#region Abstract Methods
@@ -80,6 +67,11 @@ namespace FLS.MembershipFunctions
 
 		public abstract Double Max();
 
-		#endregion
-	}
+        public void Reset()
+        {
+            _premiseModifier = 0;
+        }
+
+        #endregion
+    }
 }

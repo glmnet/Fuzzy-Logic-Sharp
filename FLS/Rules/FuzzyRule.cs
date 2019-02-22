@@ -25,23 +25,32 @@ namespace FLS.Rules
 	/// <summary>
 	/// A Fuzzy Rule.
 	/// </summary>
-	public class FuzzyRule
+	public sealed class FuzzyRule
 	{
-		#region Public Properties
+        public FuzzyRule()
+        {
+        }
 
-		public Premise Premise { get; set; }
+        public FuzzyRule(string ruleName)
+        {
+            Name = ruleName;
+        }
+        #region Public Properties
+
+        public Premise Premise { get; set; }
 
 		public Conclusion Conclusion { get; set; }
+        public string Name { get; internal set; }
 
-		#endregion
+        #endregion
 
-		#region Public Methods
+        #region Public Methods
 
-		/// <summary>
-		/// Determines if the current list of tokens is a valid rule.
-		/// </summary>
-		/// <returns>true if valid, false if invalid</returns>
-		public virtual Boolean IsValid()
+        /// <summary>
+        /// Determines if the current list of tokens is a valid rule.
+        /// </summary>
+        /// <returns>true if valid, false if invalid</returns>
+        public bool IsValid()
 		{
 			var premiseIsNotNull = null != Premise;
 			var conclusionIsNotNull = null != Conclusion;

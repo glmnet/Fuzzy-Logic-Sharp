@@ -80,7 +80,7 @@ namespace FLS
 				throw new Exception(ErrorMessages.RulesAreInvalid);
 
 			//reset membership functions
-			_rules.ForEach(r => r.Conclusion.MembershipFunction.PremiseModifier = 0);
+			_rules.ForEach(r => r.Conclusion.MembershipFunction.Reset());
 
 			SetVariableInputValues(inputValues);
 
@@ -93,18 +93,37 @@ namespace FLS
 				var ruleConclusionVar = fuzzyRule.Conclusion.Variable;
 				var membershipFunction = ruleConclusionVar.MembershipFunctions.First(mf => mf.Name == fuzzyRule.Conclusion.MembershipFunction.Name);
 
+                if (premiseValue > membershipFunction.PremiseModifier)
+                {
+                    Console.WriteLine(membershipFunction.Name + " from " + membershipFunction.PremiseModifier +
+                        " to " + premiseValue + " due to " + Dump(fuzzyRule));
+                }
 				membershipFunction.PremiseModifier = premiseValue;
 			}
 
 			return _defuzzification.Defuzzify(conclustionMembershipFunctions);
 		}
 
+        private string Dump(FuzzyRule fuzzyRule)
+        {
+            string ret = fuzzyRule.Name + " ";
+            bool first = true;
+            foreach (var item in fuzzyRule.Premise)
+            {
+                if (!first)
+                    ret += " " + item.Conjunction.Conjunction.Type + " ";
+                first = false;
+                ret += item.MembershipFunction.Name + " " + item.Operator.Type + " " + item.Variable.InputValue;
+            }
+            return ret;
+        }
 
-		#endregion
 
-		#region Public Properties
+        #endregion
 
-		public FuzzyRuleCollection Rules
+        #region Public Properties
+
+        public FuzzyRuleCollection Rules
 		{
 			get
 			{
@@ -113,12 +132,15 @@ namespace FLS
 			}
 		}
 
-		public IDefuzzification Defuzzification
-		{
-			get { return _defuzzification; }
-		}
+        public IDefuzzification Defuzzification
+        {
+            get
+            {
+                return _defuzzification;
+            }
+        }
 
-		#endregion
+        #endregion
 
-	}
+    }
 }

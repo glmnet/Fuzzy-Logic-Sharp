@@ -47,6 +47,9 @@ namespace FLS.MembershipFunctions
 		public TrapezoidMembershipFunction(String name, Double a, Double b, Double c, Double d)
 			: base(name)
 		{
+            if (b < a || c < b || d < c || a == d)
+                throw new ArgumentOutOfRangeException("Check this!");
+
 			_a = a;
 			_b = b;
 			_c = c;
